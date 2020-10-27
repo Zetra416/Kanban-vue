@@ -7,13 +7,17 @@
       </div>
     </div>
 
-    <div class="row mt-3">
-      <div class="col-md-3">
-        <div class="p-2 alert alert-secondary">
-          <h3>Backlog</h3>
+    <div class="row mt-3 ">
+    <div class=" col-md-3 mt-3 p-2" v-for="(element, id) in listType" :key="id">
+      <Card :type="element" />
+      <!-- <div class="col-md-3 p-2 alert alert-secondary">
+        <h3>Backlog</h3>
+        <div class="max-height">
           <draggable class="list-group kanban-column" :list="arrBacklog" group="tasks">
-            <div class="list-group-item" v-for="element in arrBacklog" :key="element.name">
-              {{element.name}}
+            <div class="list-group-item" v-for="(element, idx) in arrBacklog" :key="element.name">
+              <p>name: {{element.name}}</p>
+              <p>date: {{element.date}}</p>
+              <b-button class="ml-2" variant="danger" @click="remove(idx, 'backlog')">Delete</b-button>
             </div>
           </draggable>
         </div>
@@ -23,8 +27,10 @@
         <div class="p-2 alert alert-primary">
           <h3>In Progress</h3>
           <draggable class="list-group kanban-column" :list="arrInProgress" group="tasks">
-            <div class="list-group-item" v-for="element in arrInProgress" :key="element.name">
-              {{element.name}}
+            <div class="list-group-item" v-for="(element, idx) in arrInProgress" :key="element.name">
+              name: {{element.name}}
+              date: {{element.date}}
+              <b-button class="ml-2" variant="danger" @click="remove(idx, 'inProgress')">Delete</b-button>
             </div>
           </draggable>
         </div>
@@ -35,7 +41,8 @@
           <h3>Tested</h3>
           <draggable class="list-group kanban-column" :list="arrTested" group="tasks">
             <div class="list-group-item" v-for="element in arrTested" :key="element.name">
-              {{element.name}}
+              name: {{element.name}}
+              date: {{element.date}}
             </div>
           </draggable>
         </div>
@@ -46,35 +53,53 @@
           <h3>Done</h3>
           <draggable class="list-group kanban-column" :list="arrDone" group="tasks">
             <div class="list-group-item" v-for="element in arrDone" :key="element.name">
-              {{element.name}}
+              name: {{element.name}}
+              date: {{element.date}}
             </div>
           </draggable>
         </div>
-      </div>
+      </div>-->
     </div>
+  </div>
   </div>
 </template>
 
 <script>
-import draggable from 'vuedraggable';
+// import draggable from 'vuedraggable';
+import Card from './components/Card.vue';
 
 export default {
   name: 'App',
   components: {
-    draggable
+    // draggable,
+    Card
   },
   data() {
     return{
-      task: '',
-      arrBacklog: [
-        {name: 'Code SignUpPage'},
-        {name: 'Test Dashboard'},
-        {name: 'Style Registration'},
-        {name: 'Help with Designs'},
+      listType: [
+        {name: 'Backlog', background: 'alert p-3 alert-secondary', data:[
+          {name: 'Code SignUpPage', date: '26/10/2020'},
+          {name: 'Test Dashboard', date: '26/10/2020'},
+          {name: 'Style Registration', date: '26/10/2020'},
+          {name: 'Help with Designs', date: '26/10/2020'},
+        ]},
+        {name: 'InProgress', background: 'alert p-3 alert-primary', data: [
+          {name: 'Code SignUpPage', date: '26/10/2020'},
+          {name: 'Test Dashboard', date: '26/10/2020'},
+        ]},
+        {name: 'Tested', background: 'alert p-3 alert-warning', data: []},
+        {name:'Done', background: 'alert p-3 alert-success', data: []}
       ],
+      arrBacklog: [
+        {name: 'Code SignUpPage', date: '26/10/2020'},
+        {name: 'Test Dashboard', date: '26/10/2020'},
+        {name: 'Style Registration', date: '26/10/2020'},
+        {name: 'Help with Designs', date: '26/10/2020'},
+      ],
+      task: '',
       arrInProgress: [],
       arrTested: [],
-      arrDone: []
+      arrDone: [],
     }
   },
   methods:{
@@ -82,6 +107,14 @@ export default {
       if(this.task) {
         this.arrBacklog.push({name: this.task});
         this.task = '';
+      }
+    },
+    remove(idx, type) {
+      if(type == 'backlog') {
+        this.arrBacklog.splice(idx, 1);
+      }
+      else if (type == 'inProgress') {
+        this.arrInProgress.splice(idx,1);
       }
     }
   }
@@ -92,4 +125,14 @@ export default {
 .kanban-column {
   min-height: 300px;
 }
+
+.max-height {
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+.container {
+  max-width: 80% !important;
+}
+
 </style>
