@@ -5,7 +5,7 @@
   <div class="max-height">
     <draggable class="list-group kanban-column " :list="type.data" group="tasks">
     <div class="" v-for="(element, id) in type.data" :key="id" >
-          <TaskCard :type="element"/>
+          <TaskCard @deletedTask='deletedTask' :type="element"/>
     </div>
   </draggable>
   </div>
@@ -25,10 +25,16 @@ export default {
   },
   data() {
     return{
-
     }
   },
   props: ['type'],
+  methods: {
+    deletedTask(id) {
+      let type = this.type.name
+      console.log("ini di card vue", type)
+      this.$emit('deletedTask', {id, type} )
+    }
+  }
 }
 
 </script>

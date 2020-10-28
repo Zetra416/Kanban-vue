@@ -9,7 +9,7 @@
 
     <div class="row mt-3 ">
     <div class=" col-md-3 mt-3 p-2" v-for="(element, id) in listType" :key="id">
-      <Card :type="element" />
+      <Card @deletedTask='deletedTask' :type="element" />
       <!-- <div class="col-md-3 p-2 alert alert-secondary">
         <h3>Backlog</h3>
         <div class="max-height">
@@ -78,44 +78,71 @@ export default {
     return{
       listType: [
         {name: 'Backlog', background: 'alert p-3 alert-secondary', data:[
-          {name: 'Code SignUpPage', date: '26/10/2020'},
-          {name: 'Test Dashboard', date: '26/10/2020'},
-          {name: 'Style Registration', date: '26/10/2020'},
-          {name: 'Help with Designs', date: '26/10/2020'},
+          {id: 1, name: 'Code SignUpPage', date: '26/10/2020'},
+          {id: 2, name: 'Test Dashboard', date: '26/10/2020'},
+          {id: 3, name: 'Style Registration', date: '26/10/2020'},
+          {id: 4, name: 'Help with Designs', date: '26/10/2020'},
         ]},
         {name: 'InProgress', background: 'alert p-3 alert-primary', data: [
-          {name: 'Code SignUpPage', date: '26/10/2020'},
-          {name: 'Test Dashboard', date: '26/10/2020'},
+          {id: 5, name: 'Code SignUpPage', date: '26/10/2020'},
+          {id: 6, name: 'Test Dashboard', date: '26/10/2020'},
         ]},
         {name: 'Tested', background: 'alert p-3 alert-warning', data: []},
         {name:'Done', background: 'alert p-3 alert-success', data: []}
       ],
-      arrBacklog: [
-        {name: 'Code SignUpPage', date: '26/10/2020'},
-        {name: 'Test Dashboard', date: '26/10/2020'},
-        {name: 'Style Registration', date: '26/10/2020'},
-        {name: 'Help with Designs', date: '26/10/2020'},
-      ],
+      // arrBacklog: [
+      //   {name: 'Code SignUpPage', date: '26/10/2020'},
+      //   {name: 'Test Dashboard', date: '26/10/2020'},
+      //   {name: 'Style Registration', date: '26/10/2020'},
+      //   {name: 'Help with Designs', date: '26/10/2020'},
+      // ],
       task: '',
-      arrInProgress: [],
-      arrTested: [],
-      arrDone: [],
+      // arrInProgress: [],
+      // arrTested: [],
+      // arrDone: [],
     }
   },
   methods:{
     add() {
+      let newId = 0
+      if(this.listType[0].data.length > 0) newId = this.listType[0].data[this.listType[0].data.length - 1].id + 1
       if(this.task) {
-        this.arrBacklog.push({name: this.task});
+        this.listType[0].data.push({id: newId, name: this.task, date: '27/10/2020'});
         this.task = '';
       }
     },
-    remove(idx, type) {
-      if(type == 'backlog') {
-        this.arrBacklog.splice(idx, 1);
+    deletedTask(data) {
+      console.log('ini id dan type di app vue', data)
+      // this.listType[0].data.forEach((list) => {
+      //   console.log(list.id)
+      // });
+      let list;
+      switch (data.type) {
+        case 'Backlog':
+         list = this.listType[0].data
+         this.listType[0].data  = list.filter((list) => list.id !== data.id )
+         console.log("ini data baru", this.listType[0].data)
+         break;
+        case 'InProgress':
+         list = this.listType[1].data
+         this.listType[1].data  = list.filter((list) => list.id !== data.id )
+         console.log("ini data baru", this.listType[0].data)
+         break;
+        case 'Tested':
+         list = this.listType[2].data
+         this.listType[2].data  = list.filter((list) => list.id !== data.id )
+         console.log("ini data baru", this.listType[0].data)
+         break;
+        case 'Done':
+         list = this.listType[3].data
+         this.listType[3].data  = list.filter((list) => list.id !== data.id )
+         console.log("ini data baru", this.listType[0].data)
+         break;
       }
-      else if (type == 'inProgress') {
-        this.arrInProgress.splice(idx,1);
-      }
+
+      // console.log(tempList);
+
+      // console.log(list.data, "ini type list app vue")
     }
   }
 }
